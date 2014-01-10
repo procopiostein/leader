@@ -1,0 +1,24 @@
+<package>
+  <description brief="mtt">
+
+     mtt
+
+  </description>
+  <author>Jorge Almeida</author>
+  <license>BSD</license>
+  <review status="unreviewed" notes=""/>
+  <url>http://ros.org/wiki/mtt</url>
+  <depend package="std_msgs"/>
+  <depend package="rospy"/>
+  <depend package="roscpp"/>
+  <depend package="sicktoolbox"/>
+  <depend package="sensor_msgs" />
+  <depend package="tf"/>
+  <depend package="laser_geometry"/>
+  <depend package="cv_bridge"/>
+  <depend package="pcl"/>
+  <depend package="pcl_ros"/>
+  <depend package="visualization_msgs"/>
+</package>
+
+
