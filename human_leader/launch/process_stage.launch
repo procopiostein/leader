@@ -1,0 +1,13 @@
+<launch>
+  
+  <!-- transform laser meas. to point cloud, to be used by mtt -->
+  <!-- can also change ref frame -->
+  <include file="$(find mtt)/launch/generate_planar_pc_from_laser_stage.launch"/>
+  
+  <!-- process point cloud and track targets -->
+  <include file="$(find mtt)/launch/mtt_new_msg.launch"/> 
+  
+  <node name="classifier" pkg="human_leader" type="classify_features" args="$(find human_leader)/trained_boost.xml"/>
+
+
+</launch>

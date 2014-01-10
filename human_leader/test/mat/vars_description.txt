@@ -1,0 +1,9 @@
+test_vars - raw tracked targets from tests (time, 3 tags, 5 features)
+test_vars_cutted - removed transients (time, 3 tags, 5 features)
+merged_tags_situations - merged tags from taggers, named situation (time, 1 tag, 5 features)
+new_situations_improved - new OD and NM situations, alreadey with lateral displacement and rvx rvy (time, 1 tag, 7 feat)
+complete_vars_improved - all situations, computed lateral displacement and rvx rvy (time, 1 tag, 7 features)
+adaboost_models - contain all the created adaboost models
+ann_models - all the ann models created
+working_in_progress - saved while working
+

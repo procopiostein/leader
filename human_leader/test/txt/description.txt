@@ -1,0 +1,60 @@
+01 - st01 - leader stopped
+02 - fr01 - too far (and too fast)
+03 - gd01 - too far (and too fast)
+04 - gd02 - good leader, mother and son, keep walking without change
+05 - gd03 - good leader, but moves aside on the beggining, then does not care after
+06 - as01 - moved aside, let robot pass, goes into forbidden zone
+07 - as02 - moved slightly aside on the beginning, then gets far
+08 - fr02 - good leader, does not seem to bother too much
+09 - fr03 - (1) too far (slow robot)
+09 - fr04 - (115) too far (slow robot)
+10 - as03 - moved aside
+
+11 - XXXX - bad data
+12 - fr05 - too far
+13 - XXXX - bad data
+14 - as04 - moved aside
+15 - st02 - leader stopped
+16 - gd04 - good leader
+17 - gd05 - good leader, although hesitant
+18 - st03 - leader stopped
+19 - fr06 - too far
+20 - fr07 - too far (and too fast)
+
+21 - st04 - (66) stops
+21 - as05 - (19) moves aside 
+22 - XXXX - bad data - many people, leader obstructed
+23 - fr08 - many leaders, too far 
+24 - st05 - leader stops
+25 - as06 - playful guy, mixed understanding of typical beh. as he is likely playing with the robot.
+26 - st06 - backpack guy stops very soon to talk to some friends (kicking guy in the end)
+27 - fr09 - too far/fast
+28 - as07 - ignore first ones, later the leader moves aside and stops
+29 - fr10 - (considered far) ROBOT STOPS, USELESS
+30 - st07 - groups splits, some stop others move aside
+
+31 - gd06 - 234 - good leaders
+31 - gd07 - 448 - good leaders
+32 - xxxx - hard to tell, almost move aside but then resumes movement (group)
+33 - gd08 - 54 - a large group, maintains formation, no change behav, difficult to track. using only trk54, not93
+33 - gd09 - 93 - will not use this one
+34 - as08 - IMPORTANT move fast, gets far (visibly annoyed, moves sideways, when notice robot is still there, moves faster)
+35 - gd10 - 4 - good large group
+35 - gd11 - 5 - good large group
+35 - gd12 - 101 - good large group
+
+interviews
+
+01 - st08 - 23 - will not be used
+01 - st09 - 41 - group splits and one members stop
+02 - st10 - leader stops two times, jorge marked the first one, me and rich the second
+03 - as09 - moves aside  
+04 - gd13 - 1 - (although group splits)
+04 - gd14 - 1 - good (although group splits)
+04 - gd15 - 1 - good (although group splits)
+05 - as10 - moves aside
+06 - gd16 - good
+07 - as11 - hard to evaluate, after time 12 only, they move aside to meet a friend
+08 - gd17 - good (laser loose track too many times, hard to extract features)
+09 - gd18 - no camera
+10 - gd19 - no camera

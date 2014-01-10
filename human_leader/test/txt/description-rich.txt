@@ -1,0 +1,48 @@
+01 - stop, looked behind
+02 - fast/far
+03 - fast/far, relative velocity
+04 - good
+05 - good
+06 - aside, forbidden zone
+07 - far/fast
+08 - good
+09 - good
+09 - good
+10 - stop
+
+12 - good
+14 - aside
+15 - st, playful
+16 - good
+17 - good
+18 - stop
+19 - far/fast
+20 - far/fast
+
+21 - stop?
+21 - aside?
+23 - good
+24 - stop
+25 - stop, playful
+26 - stop
+27 - farfast
+28 - stop
+29 - ??
+30 - st, group dispersion
+
+31 - good 
+31 - ?same
+32 - xx
+33 - good
+33 - ?same
+34 - far/fast
+35 - xx
+
+interviews
+
+01 - st, group dispersion 
+01 - st, group dispersion
+02 - stop
+03 - aside
+05 - aside
+
