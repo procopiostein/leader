@@ -1,5 +1,6 @@
 %apply enhance_features to vars, to compute extra feature, clear all the
 %previous sets, create sets for each situation, create training set, etc.
+%input uses the name xxyy_ld
 
 %%%%%%%%%%%% enhance vars based on the improved version of them %%%%%%%%
 %%%%%%%%%%%% which contains the lateral displ, rvx and rvy      %%%%%%%%
@@ -29,19 +30,19 @@ end
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%clear all previously created enhanced vars
+%clear all previously created enhanced sets
 clear ts_st_enh ts_gd_enh ts_as_enh ts_fr_enh ts_od_enh ts_nm_enh;
 clear validation_enh train_set_enh;
 clear test_enh test_enh_total test_enh_fk test_enh_fk_total all_sets;
 
-%create sets for each situation (except od and nm)
+%create sets for each situation
+use_odnm = true;
+prepare_for_ann = false;
+
 ts_st_enh = [st02_enh;st03_enh;st05_enh;st06_enh;st07_enh;st09_enh];
 ts_gd_enh = [gd01_enh;gd03_enh;gd04_enh;gd05_enh;gd07_enh;gd08_enh;gd09_enh];
 ts_as_enh = [as01_enh;as04_enh;as06_enh;as07_enh];
 ts_fr_enh = [fr01_enh;fr03_enh;fr05_enh];
-
-use_odnm = true;
-prepare_for_ann = false;
 
 if(use_odnm)
     %create sets for od and nm situations
@@ -101,7 +102,7 @@ if(use_odnm)
     j=j+1;test_enh(j).name = 'od10';test_enh(j).set = od10_enh;
 end
 
-%%% create grouped test dataset 
+%%% create grouped test dataset ( to measure total error)
 if(use_odnm)
     test_enh_total.set = [st04_enh; st08_enh; gd02_enh;...
         gd06_enh; as02_enh; as03_enh;...
@@ -114,7 +115,7 @@ else
 end
 test_enh_total.name = 'complete set total';
 
-%%%% create dataset of vars used in training, to test training error
+%%%% create dataset of vars used in training (to test training error)
 j = 0;
 j=j+1;test_enh_fk(j).name = 'st03';test_enh_fk(j).set = st03_enh;
 j=j+1;test_enh_fk(j).name = 'st05';test_enh_fk(j).set = st05_enh;
@@ -133,10 +134,12 @@ end
 test_enh_fk_total.set = train_set_enh;
 test_enh_fk_total.name = 'training set total';
 
-% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-% %%%%%%%%%%%% new sets with lateral distance and rel vel %%%%%%%%%%%%%%%%%
-% 
+clear j name prepare_for_ann use_odnm;
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%% new sets with lateral distance and rel vel %%%%%%%%%%%%%%%%%
+
 % for name=1:9
 %     temp = eval(sprintf('st%02d',name));
 %     temp = new_features(temp);
@@ -160,6 +163,22 @@ test_enh_fk_total.name = 'training set total';
 %     temp = new_features(temp);
 %     eval(sprintf('fr%02d_ld=temp;',name));
 % end
+% 
+% for name=1:7
+%     temp = eval(sprintf('nm%02d',name));
+%     temp = new_features_odnm(temp);
+%     eval(sprintf('nm%02d_ld=temp;',name));
+% end
+% 
+% for name=1:11
+%     temp = eval(sprintf('od%02d',name));
+%     temp = new_features_odnm(temp);
+%     eval(sprintf('od%02d_ld=temp;',name));
+% end
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % 
 % ts_st_ld = [st01_ld;st03_ld;st05_ld;st06_ld;st07_ld;st09_ld];
 % ts_gd_ld = [gd01_ld;gd03_ld;gd04_ld;gd05_ld;gd07_ld;gd08_ld;gd09_ld];
@@ -215,23 +234,27 @@ test_enh_fk_total.name = 'training set total';
 % 
 % %%%%%%%%%%%%%%%%%%%% clear sets %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % for name=1:9
-%     eval(sprintf('clear st%02d_ld;',name));
 %     eval(sprintf('clear st%02d;',name));
 % end
 % 
 % for name=1:9
-%     eval(sprintf('clear gd%02d_ld;',name));
 %     eval(sprintf('clear gd%02d;',name));
 % end
 % 
 % for name=1:7
-%     eval(sprintf('clear as%02d_ld;',name));
 %     eval(sprintf('clear as%02d;',name));
 % end
 % 
 % for name=1:5
-%     eval(sprintf('clear fr%02d_ld;',name));
 %     eval(sprintf('clear fr%02d;',name));
+% end
+% 
+% for name=1:7
+%     eval(sprintf('clear nm%02d;',name));
+% end
+% 
+% for name=1:11
+%     eval(sprintf('clear od%02d;',name));
 % end
 % 
 % %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%

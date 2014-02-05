@@ -5,6 +5,7 @@ Panels:
     Property Tree Widget:
       Expanded:
         - /Global Options1
+        - /Legs1
       Splitter Ratio: 0.5
     Tree Height: 473
   - Class: rviz/Selection
@@ -25,7 +26,7 @@ Panels:
     Experimental: false
     Name: Time
     SyncMode: 0
-    SyncSource: ""
+    SyncSource: Image
 Visualization Manager:
   Class: ""
   Displays:
@@ -63,7 +64,8 @@ Visualization Manager:
       Marker Topic: /ids
       Name: IDs
       Namespaces:
-        {}
+        ids: true
+        objects: true
       Queue Size: 100
       Value: true
     - Alpha: 1
@@ -105,6 +107,16 @@ Visualization Manager:
       Enabled: true
       Frame Timeout: 15
       Frames:
+        /base_laser_link:
+          Value: true
+        /base_link:
+          Value: true
+        /camera:
+          Value: true
+        /map:
+          Value: true
+        /scanmatcher_frame:
+          Value: true
         All Enabled: true
       Marker Scale: 1
       Name: TF
@@ -112,7 +124,14 @@ Visualization Manager:
       Show Axes: true
       Show Names: true
       Tree:
-        {}
+        /map:
+          /base_link:
+            /base_laser_link:
+              {}
+            /camera:
+              {}
+          /scanmatcher_frame:
+            {}
       Update Interval: 0
       Value: true
     - Class: rviz/MarkerArray
@@ -141,7 +160,7 @@ Visualization Manager:
       Channel Name: intensity
       Class: rviz/PointCloud2
       Color: 255; 255; 255
-      Color Transformer: ""
+      Color Transformer: Intensity
       Decay Time: 0
       Enabled: true
       Max Color: 255; 255; 255
@@ -149,7 +168,7 @@ Visualization Manager:
       Min Color: 0; 0; 0
       Min Intensity: 0
       Name: PointCloud2
-      Position Transformer: ""
+      Position Transformer: XYZ
       Queue Size: 10
       Selectable: true
       Size (Pixels): 3
@@ -158,6 +177,15 @@ Visualization Manager:
       Topic: /pointcloud
       Use Fixed Frame: true
       Use rainbow: true
+      Value: true
+    - Class: rviz/Marker
+      Enabled: true
+      Marker Topic: /leg_tracker_marker
+      Name: Legs
+      Namespaces:
+        LEGS: true
+        PEOPLE: true
+      Queue Size: 100
       Value: true
   Enabled: true
   Global Options:
@@ -182,17 +210,17 @@ Visualization Manager:
   Views:
     Current:
       Class: rviz/Orbit
-      Distance: 21.0406
+      Distance: 13.7978
       Focal Point:
-        X: 11.5672
-        Y: -1.04462
-        Z: 15.7015
+        X: 10.5137
+        Y: 0.640916
+        Z: 15.7018
       Name: Current View
       Near Clip Distance: 0.01
       Pitch: 1.5698
       Target Frame: <Fixed Frame>
       Value: Orbit (rviz)
-      Yaw: 4.75539
+      Yaw: 4.65039
     Saved: ~
 Window Geometry:
   Displays:
@@ -212,5 +240,5 @@ Window Geometry:
   Views:
     collapsed: false
   Width: 1624
-  X: 47
+  X: 42
   Y: 24

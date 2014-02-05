@@ -7,3 +7,4 @@ out = in;
 out(:,8) = rel_vel_x;
 out(:,9) = rel_vel_y;
 out(:,4) = sin(in(:,6)).*in(:,7); %put ld in place of rv
+out(:,10) = cos(in(:,6)).*in(:,7); %new feature: sagital dist
