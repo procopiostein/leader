@@ -209,8 +209,8 @@ int main(int argc,char**argv)
   mtt::TargetList targetList;
   
   t_config	config;	
-  t_data		full_data;
-  t_flag		flags;
+  t_data	full_data;
+  t_flag	flags;
   
   vector<t_clustersPtr> clusters;
   vector<t_objectPtr> object;
@@ -227,7 +227,6 @@ int main(int argc,char**argv)
   Publisher target_publisher = nh.advertise<mtt::TargetList>("/targets", 1000);
   Publisher markers_publisher= nh.advertise<visualization_msgs::MarkerArray>("/markers", 1000);
   Publisher arrow_publisher= nh.advertise<visualization_msgs::MarkerArray>("/arrows", 1000);
-// 	Publisher marker_publisher= nh.advertise<visualization_msgs::Marker>("/marker", 1000);
   
   init_flags(&flags);		//Inits flags values
   init_config(&config);	//Inits configuration values
