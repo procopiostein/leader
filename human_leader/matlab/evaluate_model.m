@@ -3,7 +3,10 @@
 %create plots comparing ground truth and classification, also prints error
 %of false good, false bad and false total
 
-function [] = evaluate_model(model,test_set)
+function [error_matrix] = evaluate_model(model,test_set)
+
+dataset_length = length(test_set);
+error_matrix(3,dataset_length) = 0;
 
 if size(test_set,1)~=1
     temp = test_set;
@@ -12,7 +15,7 @@ if size(test_set,1)~=1
     test_set.name = 'single';
 end
 
-for number = 1:length(test_set)
+for number = 1:dataset_length
     
     test = test_set(number).set;
     name = test_set(number).name;
@@ -46,12 +49,17 @@ for number = 1:length(test_set)
     false_bad_ratio = false_bad / length(differences);
     false_good_ratio = false_good / length(differences);
     %     error_ratio = false_total / length(differences);
-    false_bad_ratio = round(false_bad_ratio*100)/100;
-    false_good_ratio = round(false_good_ratio*100)/100;
+    false_bad_ratio = round(false_bad_ratio*1000)/1000;
+    false_good_ratio = round(false_good_ratio*1000)/1000;
     error_ratio = false_bad_ratio + false_good_ratio;
 %     error_ratio = round(error_ratio*100)/100;
+
+    error_matrix(1,number) = false_good_ratio;
+    error_matrix(2,number) = false_bad_ratio;
+    error_matrix(3,number) = error_ratio;
+    
     title_string = ...
-        sprintf('false good:%.2f, false bad:%.2f, total error:%.2f',...
+        sprintf('false good:%.4f, false bad:%.4f, total error:%.4f',...
         false_good_ratio, false_bad_ratio, error_ratio);
     %title_string =  ['test:' name ' ' title_string];
     
