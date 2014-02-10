@@ -1,5 +1,10 @@
 #ROS git ignore
 
+#added by procopio
+__*\.py
+*~
+mtt/src/mtt/msg
+
 ~$
 .swp$
 build/
