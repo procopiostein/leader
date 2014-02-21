@@ -29,7 +29,7 @@ set(LIBRARY_OUTPUT_PATH ${PROJECT_SOURCE_DIR}/lib)
 #rosbuild_add_executable(example examples/example.cpp)
 #target_link_libraries(example ${PROJECT_NAME})
 
-rosbuild_add_executable(extract_features src/extract_features.cpp)
+# rosbuild_add_executable(extract_features src/extract_features.cpp)
 rosbuild_add_executable(classify_features src/classify_features.cpp)
 rosbuild_add_executable(bag_tagger src/bag_tagger.cpp)
 rosbuild_add_executable(matlab_rviz src/matlab_rviz.cpp)

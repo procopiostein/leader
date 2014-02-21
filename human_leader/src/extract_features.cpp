@@ -38,10 +38,16 @@
 
 #include "ros/ros.h"
 #include "std_msgs/String.h"
-// #include "geometry_msgs/PoseWithCovariance.h"
 #include "tf/transform_listener.h"
 #include "mtt/TargetList.h"
-// #include <visualization_msgs/Marker.h>
+#include <boost/circular_buffer.hpp>
+#include <boost/accumulators/accumulators.hpp>
+#include <boost/accumulators/statistics/stats.hpp>
+#include <boost/accumulators/statistics/mean.hpp>
+#include <boost/accumulators/statistics/weighted_sum.hpp>
+#include <numeric>
+
+using namespace boost::accumulators;
 
 // static ros::Time start_time;
 ros::Time time_last_msg(0);
@@ -58,6 +64,11 @@ geometry_msgs::Twist features;
 // geometry_msgs::PoseWithCovariance nfeatures;
 
 // std::list<geometry_msgs::PoseWithCovariance> matlab_list;
+
+//statics
+boost::circular_buffer<double> robot_posex_buffer(30);
+accumulator_set<double, stats<tag::mean> > acc;
+accumulator_set<double, features< tag::sum >, int > acc;
 
 double target_x, target_y;
 double target_vel, target_theta;
@@ -78,7 +89,6 @@ void targetsCallback(const mtt::TargetList& list)
   //             position_diff, heading_diff, angle_to_robot, velocity_diff
   static ros::Time start_time = ros::Time::now();
   time_elapsed = ros::Time::now() - start_time;
-//   matlab_list.clear();
   
   /// /// ROBOT PART //////
   //use transformations to extract robot features
@@ -91,15 +101,29 @@ void targetsCallback(const mtt::TargetList& list)
   }
 
   robot_x = transform.getOrigin().x();
+  
+  robot_posex_buffer.push_back(robot_x);
+  
   robot_y = transform.getOrigin().y();
   robot_theta = tf::getYaw(transform.getRotation());
   robot_vel = sqrt(pow(twist.linear.x, 2) + pow(twist.linear.y, 2));
    
   //robot output line 
   /// uncomment the following for training!
-  printf("%d,%d,%.10f,%.10f,%.10f,%.10f,%.10f,0,0,0,0\n",
-         -1, leader_tag, time_elapsed.toSec(),
-         robot_x, robot_y, robot_vel, robot_theta); 
+//   printf("%d,%d,%.10f,%.10f,%.10f,%.10f,%.10f,0,0,0,0\n",
+//          -1, leader_tag, time_elapsed.toSec(),
+//          robot_x, robot_y, robot_vel, robot_theta); 
+
+  acc = for_each(robot_posex_buffer.begin(), robot_posex_buffer.end(), acc);
+  
+  double sum2 = accumulate(robot_posex_buffer.begin(), robot_posex_buffer.end(), 0.0);
+  double mean2 = sum2 / robot_posex_buffer.size();
+  
+//   printf("%f,%f,%f,size:%d\n",
+//          robot_x, *robot_posex_buffer.begin() ,*(robot_posex_buffer.end()-1), robot_posex_buffer.size()); 
+  
+  printf("%f,%f,%f\n",
+        robot_x, sum(acc),mean2); 
   
   /// /// TARGETS PART //////
   //sweeps target list and extract features
@@ -133,10 +157,10 @@ void targetsCallback(const mtt::TargetList& list)
     // %11: velocity diff 
     
     /// uncomment the following for training!
-    printf("%d,%d,%.10f,%.10f,%.10f,%.10f,%.10f,%.10f,%.10f,%.10f,%.10f\n",
-      target_id, leader_tag, time_elapsed.toSec(),
-      target_x, target_y, target_vel, target_theta,
-      position_diff, heading_diff, angle_to_robot, velocity_diff);
+//     printf("%d,%d,%.10f,%.10f,%.10f,%.10f,%.10f,%.10f,%.10f,%.10f,%.10f\n",
+//       target_id, leader_tag, time_elapsed.toSec(),
+//       target_x, target_y, target_vel, target_theta,
+//       position_diff, heading_diff, angle_to_robot, velocity_diff);
     
 //     if(position_diff < 6.0 && target_vel > 0.5){
 //       //if inside boundaries (in meters)

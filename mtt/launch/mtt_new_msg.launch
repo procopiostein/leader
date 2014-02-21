@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <!-- receives pointcloud from laser and detect targets -->
 <launch>
-  <node name="node" pkg="mtt" type="mtt_new_msg">
+  <node name="tracker" pkg="mtt" type="mtt_new_msg">
     <remap from="/points" to="/pointcloud"/>
     <remap from="/markers" to="/ids"/>
   </node>

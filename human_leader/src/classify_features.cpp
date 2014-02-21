@@ -179,7 +179,7 @@ void targetsCallback(const mtt::TargetList& list)
     lateral_disp = sin(angle_to_robot)*position_diff;
       
     
-//     if(position_diff < 6.0 && target_vel > 0.5){
+    if(position_diff < 10.0 && target_vel > 0.1 && target_vel < 2.0){
       sample_to_classify->data.fl[1] = target_vel;
       sample_to_classify->data.fl[2] = lateral_disp;
       sample_to_classify->data.fl[3] = heading_diff;
@@ -190,7 +190,7 @@ void targetsCallback(const mtt::TargetList& list)
       label = adaboost.predict(sample_to_classify, 0, weak_responses );
 //       ROS_INFO("label:%f, now will publish",label);
       drawPose(list.Targets[i].pose, target_id, label);
-//     }
+    }
   }
       
   marker_pub.publish(ma);

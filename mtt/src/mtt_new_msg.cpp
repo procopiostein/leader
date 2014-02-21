@@ -337,9 +337,9 @@ int main(int argc,char**argv)
         arrow_marker.color.a = 1;
         
 //                     arrow_marker.scale.x = ;
-        arrow_marker.scale.x = 2; //height
-        arrow_marker.scale.y = 5; //width
-        arrow_marker.scale.z = list[i]->velocity.velocity_module; //length
+        arrow_marker.scale.x = list[i]->velocity.velocity_module;  //length
+        arrow_marker.scale.y = 0.1; //width
+        arrow_marker.scale.z = 0.1; //height
 
         arrow_marker.lifetime = ros::Duration(1.0);
         arrow_marker.id = list[i]->id;
