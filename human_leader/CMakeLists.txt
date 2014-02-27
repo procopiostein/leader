@@ -17,7 +17,7 @@ set(EXECUTABLE_OUTPUT_PATH ${PROJECT_SOURCE_DIR}/bin)
 set(LIBRARY_OUTPUT_PATH ${PROJECT_SOURCE_DIR}/lib)
 
 #uncomment if you have defined messages
-#rosbuild_genmsg()
+rosbuild_genmsg()
 #uncomment if you have defined services
 #rosbuild_gensrv()
 
@@ -34,3 +34,8 @@ rosbuild_add_executable(classify_features src/classify_features.cpp)
 rosbuild_add_executable(bag_tagger src/bag_tagger.cpp)
 rosbuild_add_executable(matlab_rviz src/matlab_rviz.cpp)
 rosbuild_add_executable(bag_filter src/bag_filter.cpp)
+rosbuild_add_executable(leader_follower src/leader_follower.cpp)
+rosbuild_add_executable(leader_follower_class src/leader_follower_class.cpp)
+rosbuild_add_executable(adaboost src/adaboost.cpp)
+rosbuild_add_executable(predict src/predict.cpp)
+
