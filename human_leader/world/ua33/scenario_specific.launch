@@ -1,0 +1,7 @@
+<!-- experiment specif config -->
+<!-- author: procopio -->
+<launch>
+
+<node pkg="nav_tools" type="send_initialpose_single" name="send_initialpose_single" args="-2 1 0" />
+
+</launch>

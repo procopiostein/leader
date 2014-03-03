@@ -15,7 +15,7 @@ evaluates each goal in comparison to the robot goal, then when a leader is foun
 that is being published normally by ar_human_proc, which wraps markers into that structure
 ********/
 
-void dyn_objects_callback(const social_filter::TrajectoryObservation::ConstPtr & dyn_objects){
+void dyn_objects_callback(const human_leader::TrajectoryObservation::ConstPtr & dyn_objects){
 
   ///update candidtes info and store path of leader if one has been found
   

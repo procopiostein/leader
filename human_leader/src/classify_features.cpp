@@ -24,16 +24,16 @@
  IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT
  OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 ***************************************************************************************************/
-/*! \brief Code for feature extraction
+/*! \brief feature classification
  *
- *  extract features from targets received from MTT wrt the robot
- *  the features are printed in the command line and should be stored
- *  in a file (txt) for further processing with matlab
- *  the features will be used for training a classifier
- * 
- *  it is also responsible of publishing these features to a matlab
- *  classifier that will then output a message with the classification
- *  of the target based on its features
+ *  based on feature extraction code, basically does the same job
+ *  but instead of printing out the features, they are classified
+ *  using adaboost, and then published for the leader_following_class
+ *  which manages the choice of leaders based on the classification.
+ *  this node also output markers representing the classifier output
+ *  for visualization purposes.
+ *  the trained adaboost structure is loaded when launching this node
+ *  and it is stored in a xml file (trained_boost.xml for example)
  */
 
 #include "ros/ros.h"

@@ -1,0 +1,12 @@
+<!-- experiment specif config -->
+<!-- author: procopio -->
+<launch>
+
+<node pkg="nav_tools" type="send_initialpose_single" name="send_initialpose_single" args="0 0 0" />
+
+<!-- <arg name="persons" value="2" />  -->
+<!-- <node pkg="social_filter" type="fform_detect" name="fform_detect" output="screen"/>   -->
+<!-- <node pkg="social_filter"  type="human_proc" name="human_proc" args="$(arg persons)" output="screen"/>   -->
+<!-- <node pkg="social_filter" type="human_markers" name="human_markers" output="screen"/> -->
+
+</launch>

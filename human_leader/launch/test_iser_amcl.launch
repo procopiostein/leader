@@ -1,0 +1,26 @@
+<launch>
+  
+  <include file="$(find wheelchair)/launch/bb_manual.launch"/>
+  
+  <!-- initialize amcl -->
+  <include file="$(find wheelchair)/launch/amcl.launch"/>
+  
+  <!--   map -->
+  <node pkg="map_server" type="map_server" name="map_server" output="screen" args="$(find wheelchair)/world/inria.yaml" respawn="false" >
+    <param name="frame_id" value="/map" />
+  </node>
+  
+  <!-- start classifier -->
+  <node pkg="human_leader" type="classify_features" name="classifier" args="$(find human_leader)/trained_boost.xml" output="screen"/>
+  
+  <!-- transform laser meas. to point cloud, to be used by mtt -->
+  <!-- can also change ref frame -->
+  <include file="$(find mtt)/launch/generate_planar_pc_from_laser_atlasmv.launch"/>
+  
+  <!-- process point cloud and track targets -->
+  <include file="$(find mtt)/launch/mtt_new_msg.launch"/> 
+  
+  <!-- launch rviz -->
+  <node pkg="rviz" type="rviz" name="rviz" args="-d $(find wheelchair)/conf/iser_test.rviz" />
+
+</launch>

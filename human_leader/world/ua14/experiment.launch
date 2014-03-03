@@ -1,0 +1,8 @@
+<launch>
+  
+<!--   <node pkg="nav_tools" type="send_initialpose_single" name="send_initialpose_single" args="0 0 1.06" /> -->
+  
+<!--   <node pkg="social_filter" type="leader_follower_class" name="leader_follower_class" output="screen"/> -->
+  <node pkg="nav_tools" type="send_goal" name="send_robot_goal" args="31 23 0.684 goal 2" /> -->" />
+
+</launch>

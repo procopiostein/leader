@@ -20,7 +20,7 @@
 #include "social_filter/humanPose.h" //this is for the msg defined
 #include "social_filter/humanPoses.h"
 
-#include "social_filter/TrajectoryObservation.h"
+#include "human_leader/TrajectoryObservation.h"
 
 struct candidates_struct{
   int id;
@@ -92,7 +92,7 @@ double robot_goal_x, robot_goal_y;
 double heading;
 
 void target_pose_callback(const nav_msgs::Odometry::ConstPtr& msg);
-void dyn_objects_callback(const social_filter::TrajectoryObservation::ConstPtr & dyn_objects);
+void dyn_objects_callback(const human_leader::TrajectoryObservation::ConstPtr & dyn_objects);
 void leader_goal_callback(const geometry_msgs::PoseStamped::ConstPtr & msg);
 void robot_goal_callback(const geometry_msgs::PoseStamped::ConstPtr & msg);
 void robot_pose_callback(const nav_msgs::Odometry::ConstPtr & msg);

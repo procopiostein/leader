@@ -9,12 +9,12 @@
   <arg name="scenario" default="ua15" />
   
   ## Publish map
-  <node pkg="map_server" type="map_server" name="map_server" output="screen" args="$(find wheelchair)/world/$(arg scenario)/map.yaml" respawn="false" >
+  <node pkg="map_server" type="map_server" name="map_server" output="screen" args="$(find human_leader)/world/$(arg scenario)/map.yaml" respawn="false" >
     <param name="frame_id" value="/map" />
   </node>
 
   ## Start stage
-  <node pkg="stage" type="stageros" name="stageros" args="$(find wheelchair)/world/$(arg scenario)/scenario.world" respawn="false" output="screen">
+  <node pkg="stage" type="stageros" name="stageros" args="$(find human_leader)/world/$(arg scenario)/scenario.world" respawn="false" output="screen">
     <param name="base_watchdog_timeout" value="0.2"/>
   </node>
   
@@ -22,16 +22,16 @@
   <include file="$(find wheelchair)/launch/amcl.launch"/>
   
   ## load robot position
-  <include file="$(find wheelchair)/world/$(arg scenario)/scenario_specific.launch"/> 
+  <include file="$(find human_leader)/world/$(arg scenario)/scenario_specific.launch"/> 
   
   ## rviz
-  <node pkg="rviz" type="rviz" name="rviz" args="-d $(find wheelchair)/conf/ua_nav.vcg" />
+  <node pkg="rviz" type="rviz" name="rviz" args="-d $(find human_leader)/conf/ua_nav.rviz" />
   
   ## classifier
-  <node pkg="process_target" type="classify_features" name="classifier" args="$(find process_target)/trained_boost.xml" />
+  <node pkg="human_leader" type="classify_features" name="classifier" args="$(find process_target)/trained_boost.xml" />
   
   ## leader manager and follower
-  <node pkg="social_filter" type="leader_follower_class" name="leader_follower_class" output="screen"/>
+  <node pkg="human_leader" type="leader_follower_class" name="leader_follower_class" output="screen"/>
  
   ## move base
   <node pkg="move_base" type="move_base" respawn="false" name="move_base_node" output="screen">
