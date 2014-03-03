@@ -3,7 +3,8 @@
 #added by procopio
 __*\.py
 *~
-mtt/src/mtt/msg
+mtt/src/mtt
+human_leader/src/human_leader
 
 ~$
 .swp$
