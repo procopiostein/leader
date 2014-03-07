@@ -1,0 +1,17 @@
+#Obstacle marking parameters
+obstacle_range: 5.0
+raytrace_range: 5.0
+
+#The footprint of the robot and associated padding
+footprint: [[-0.7, -0.325], [-0.7, 0.325], [0.7, 0.325],[0.7, -0.325]]
+
+#Cost function parameters
+inflation_radius: 0.55
+
+#Configuration for the sensors that the costmap will use to update a map
+observation_sources: scan
+scan:   {data_type: LaserScan, 
+         sensor_frame: base_laser_link, 
+         topic: base_scan, 
+         marking: true, 
+         clearing: true}

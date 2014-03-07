@@ -23,7 +23,7 @@
   </node>
   
   ## initialize amcl
-  <include file="$(find wheelchair)/launch/amcl.launch"/>
+  <include file="$(find human_leader)/launch/amcl.launch"/>
   
   ## scenario specifics
   <include file="$(find human_leader)/world/$(arg scenario)/scenario_specific.launch"/>

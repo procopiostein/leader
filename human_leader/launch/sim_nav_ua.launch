@@ -1,5 +1,6 @@
 <!-- simulation of a single robot in stage -->
 <!-- using previously saved map, from following test -->
+<!-- it is possible to give goals and use move base do make the robot move -->
 <!-- must play bag file that contains ids and targets, or provide them running mtt+hector_slam -->
 <!-- author: Procopio -->
 
@@ -19,7 +20,7 @@
   </node>
   
   ## initialize amcl
-  <include file="$(find wheelchair)/launch/amcl.launch"/>
+  <include file="$(find human_leader)/launch/amcl.launch"/>
   
   ## load robot position
   <include file="$(find human_leader)/world/$(arg scenario)/scenario_specific.launch"/> 
@@ -37,11 +38,11 @@
   <node pkg="move_base" type="move_base" respawn="false" name="move_base_node" output="screen">
     <remap from="map" to="/map" />
     <param name="controller_frequency" value="10.0" />
-    <rosparam file="$(find wheelchair)/move_base_config/common.yaml" command="load" ns="global_costmap" />
-    <rosparam file="$(find wheelchair)/move_base_config/common.yaml" command="load" ns="local_costmap" />
-    <rosparam file="$(find wheelchair)/move_base_config/local.yaml" command="load" />
-    <rosparam file="$(find wheelchair)/move_base_config/global.yaml" command="load" />
-    <rosparam file="$(find wheelchair)/move_base_config/planner.yaml" command="load" />
+    <rosparam file="$(find human_leader)/move_base_config/common.yaml" command="load" ns="global_costmap" />
+    <rosparam file="$(find human_leader)/move_base_config/common.yaml" command="load" ns="local_costmap" />
+    <rosparam file="$(find human_leader)/move_base_config/local.yaml" command="load" />
+    <rosparam file="$(find human_leader)/move_base_config/global.yaml" command="load" />
+    <rosparam file="$(find human_leader)/move_base_config/planner.yaml" command="load" />
   </node>
 
 <!-- <param name="base_global_planner" value="goal_passer/GoalPasser"/> -->
