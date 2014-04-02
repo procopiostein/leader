@@ -1,3 +1,6 @@
+<!-- test leader classification while manually controlling wheelchair  -->
+<!-- author: Procopio -->
+
 <launch>
   
   <include file="$(find wheelchair)/launch/bb_manual.launch"/>
@@ -6,7 +9,8 @@
   <include file="$(find wheelchair)/launch/amcl.launch"/>
   
   <!--   map -->
-  <node pkg="map_server" type="map_server" name="map_server" output="screen" args="$(find wheelchair)/world/inria.yaml" respawn="false" >
+  <!--<node pkg="map_server" type="map_server" name="map_server" output="screen" args="$(find wheelchair)/world/inria.yaml" respawn="false" >-->
+  <node pkg="map_server" type="map_server" name="map_server" output="screen" args="$(find wheelchair)/world/innorobo2.yaml" respawn="false" >
     <param name="frame_id" value="/map" />
   </node>
   

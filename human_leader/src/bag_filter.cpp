@@ -71,7 +71,7 @@ void targetsCallback(const mtt::TargetList& list){
 void arrowsCallback(const visualization_msgs::MarkerArray &msg){
   arrow_markerList.markers.clear();
   for(uint i = 0; i < msg.markers.size(); i++){
-    if(msg.markers[i].id == interest_id){
+    if(uint(msg.markers[i].id) == uint(interest_id)){
       arrow_marker = msg.markers[i];
       arrow_markerList.markers.push_back(arrow_marker);
     }
@@ -82,7 +82,7 @@ void arrowsCallback(const visualization_msgs::MarkerArray &msg){
 void idsCallback(const visualization_msgs::MarkerArray &msg){
   ids_markerList.markers.clear();
   for(uint i = 0; i < msg.markers.size(); i++){
-    if(msg.markers[i].id == interest_id){
+    if(uint(msg.markers[i].id) == uint(interest_id)){
       ids_marker = msg.markers[i];
       ids_markerList.markers.push_back(ids_marker);
     }

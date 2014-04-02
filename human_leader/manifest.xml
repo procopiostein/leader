@@ -15,8 +15,8 @@
   <depend package="rosbag"/>
   <depend package="visualization_msgs"/>
   <depend package="mtt"/>
+  <depend package="people_msgs" />
   <depend package="move_base_msgs"/>
-  <depend package="social_filter"/>
 </package>
 
 

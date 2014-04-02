@@ -36,15 +36,19 @@
  *  and it is stored in a xml file (trained_boost.xml for example)
  */
 
-#include "ros/ros.h"
-#include "std_msgs/String.h"
-#include "geometry_msgs/PoseWithCovariance.h"
-#include "tf/transform_listener.h"
-#include "mtt/TargetList.h"
+#include <ros/ros.h>
+#include <std_msgs/String.h>
+#include <geometry_msgs/PoseWithCovariance.h>
+#include <tf/transform_listener.h>
+#include <mtt/TargetList.h>
+
 #include <visualization_msgs/Marker.h>
 #include <visualization_msgs/MarkerArray.h>
-#include "opencv/cv.h"
-#include "opencv/ml.h"
+#include <people_msgs/PositionMeasurementArray.h>
+
+#include <opencv/cv.h>
+#include <opencv/ml.h>
+
 #include <vector>
 #include <iostream>
 
@@ -136,6 +140,73 @@ void drawPose(const geometry_msgs::Pose& input, uint target, double classificati
 //   marker_pub.publish(marker);
 }
 
+void legsCallback(const people_msgs::PositionMeasurementArray& list)
+{
+  static ros::Time start_time = ros::Time::now();
+  time_elapsed = ros::Time::now() - start_time;
+  matlab_list.clear();
+  
+  /// /// ROBOT PART //////
+  //use transformations to extract robot features
+//   try{
+//     p_listener->lookupTransform("/map", "/robot_0/base_link", ros::Time(0), transform);
+//     p_listener->lookupTwist("/map", "/robot_0/base_link", ros::Time(0), ros::Duration(0.5), twist);
+//   }
+  try{
+    p_listener->lookupTransform("/map", "/base_link", ros::Time(0), transform);
+    p_listener->lookupTwist("/map", "/base_link", ros::Time(0), ros::Duration(0.5), twist);
+  }
+  catch (tf::TransformException ex){
+    ROS_ERROR("%s",ex.what());
+  }
+
+  robot_x = transform.getOrigin().x();
+  robot_y = transform.getOrigin().y();
+  robot_theta = tf::getYaw(transform.getRotation());
+  robot_vel = sqrt(pow(twist.linear.x, 2) + pow(twist.linear.y, 2));
+  
+  /// /// TARGETS PART //////
+  //sweeps target list and extract features
+  for(uint i = 0; i < list.people.size(); i++){
+
+    target_id = atoi(list.people[i].name.c_str());
+    target_x = list.people[i].pos.x;
+    target_y = list.people[i].pos.y;
+    target_theta = 0; //tf::getYaw(list.people[i].pos.orientation);
+    target_vel = 0; //sqrt(pow(list.Targets[i].velocity.linear.x,2)+
+                    //  pow(list.Targets[i].velocity.linear.y,2));
+    position_diff = sqrt(pow(robot_x - target_x,2)+
+                        pow(robot_y - target_y,2));
+    heading_diff = 0; //robot_theta - target_theta;
+    angle_to_robot = -robot_theta + atan2(target_y - robot_y, target_x - robot_x );
+    velocity_diff = 0; //robot_vel - target_vel;
+    lateral_disp = sin(angle_to_robot)*position_diff;
+      
+    
+    if(true/*position_diff < 10.0 && target_vel < 2.0*/){
+      sample_to_classify->data.fl[1] = target_vel;
+      sample_to_classify->data.fl[2] = lateral_disp;
+      sample_to_classify->data.fl[3] = heading_diff;
+      sample_to_classify->data.fl[4] = angle_to_robot;
+      sample_to_classify->data.fl[5] = position_diff;
+      
+//       ROS_INFO("classifying     ");
+      label = adaboost.predict(sample_to_classify, 0, weak_responses );
+//       ROS_INFO("label:%f, now will publish",label);
+      
+      geometry_msgs::Pose legs_pose;
+      legs_pose.position = list.people[i].pos;
+//       ROS_INFO("target_id %c",list.people[i].object_id);
+      
+      drawPose(legs_pose, target_id, label);
+    }
+  }
+  
+  ROS_INFO("size:%d",ma.markers.size());
+  marker_pub.publish(ma);
+  ma.markers.clear();
+}
+
 void targetsCallback(const mtt::TargetList& list)
 {
   static ros::Time start_time = ros::Time::now();
@@ -214,6 +285,7 @@ int main(int argc, char **argv)
   weak_responses = cvCreateMat( 1, adaboost.get_weak_predictors()->total, CV_32F );
     
   ros::Subscriber sub = n.subscribe("/targets", 1000, targetsCallback);
+  ros::Subscriber leg_sub = n.subscribe("/people_tracker_measurements", 1000, legsCallback);
 //   ros::Subscriber sub_tag = n.subscribe("/timetag", 1000, tagCallback);
 //   ros::Subscriber sub_draw = n.subscribe("/pose_to_draw", 1000, drawCallback);
   nfeatures_pub = n.advertise<geometry_msgs::PoseWithCovariance>("/example_topic", 1000);

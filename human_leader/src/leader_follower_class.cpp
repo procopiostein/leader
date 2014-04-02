@@ -397,11 +397,14 @@ int main(int argc, char **argv){
   tf::TransformListener _listener;
   listener = &_listener;
   
-  //move base action lib
-  MoveBaseClient _ac("/move_base", true);
-  ac = &_ac;
   
   ///////////////////////////////////////////
+  //move base action lib
+  
+//   MoveBaseClient _ac("/move_base", true);
+//   ac = &_ac;
+  
+  
 
 //    while(!ros::service::waitForService("/robot_0/move_base_node/make_plan", ros::Duration(3.0))) {
 //       ROS_ERROR("Service move_base/make_plan not available - waiting.");
