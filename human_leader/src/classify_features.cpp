@@ -170,16 +170,16 @@ void legsCallback(const people_msgs::PositionMeasurementArray& list)
   for(uint i = 0; i < list.people.size(); i++){
 
     target_id = atoi(list.people[i].name.c_str());
-    target_x = list.people[i].pos.x;
-    target_y = list.people[i].pos.y;
-    target_theta = 0; //tf::getYaw(list.people[i].pos.orientation);
-    target_vel = 0; //sqrt(pow(list.Targets[i].velocity.linear.x,2)+
-                    //  pow(list.Targets[i].velocity.linear.y,2));
+    target_x = list.people[i].pose.position.x;
+    target_y = list.people[i].pose.position.y;
+    target_theta = tf::getYaw(list.people[i].pose.orientation);
+    target_vel = sqrt(pow(list.people[i].velocity.linear.x,2)+
+                    pow(list.people[i].velocity.linear.y,2));
     position_diff = sqrt(pow(robot_x - target_x,2)+
                         pow(robot_y - target_y,2));
-    heading_diff = 0; //robot_theta - target_theta;
+    heading_diff = robot_theta - target_theta;
     angle_to_robot = -robot_theta + atan2(target_y - robot_y, target_x - robot_x );
-    velocity_diff = 0; //robot_vel - target_vel;
+    velocity_diff = robot_vel - target_vel;
     lateral_disp = sin(angle_to_robot)*position_diff;
       
     
@@ -202,7 +202,7 @@ void legsCallback(const people_msgs::PositionMeasurementArray& list)
     }
   }
   
-  ROS_INFO("size:%d",ma.markers.size());
+//   ROS_INFO("size:%d",ma.markers.size());
   marker_pub.publish(ma);
   ma.markers.clear();
 }

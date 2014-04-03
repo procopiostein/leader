@@ -68,7 +68,7 @@ geometry_msgs::Twist features;
 //statics
 boost::circular_buffer<double> robot_posex_buffer(30);
 accumulator_set<double, stats<tag::mean> > acc;
-accumulator_set<double, features< tag::sum >, int > acc;
+// accumulator_set<double, features< tag::sum >, int > acc;
 
 double target_x, target_y;
 double target_vel, target_theta;

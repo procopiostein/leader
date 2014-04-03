@@ -831,7 +831,7 @@ public:
         pos.object_id = (*sf_iter)->id_;
         pos.pos.x = (*sf_iter)->position_[0];
         pos.pos.y = (*sf_iter)->position_[1];
-        pos.pos.z = (*sf_iter)->position_[2];
+        pos.pos.z = (*sf_iter)->position_[2];    
         pos.reliability = reliability;
         pos.covariance[0] = pow(0.3 / reliability,2.0);
         pos.covariance[1] = 0.0;
@@ -894,10 +894,17 @@ public:
             pos.pos.y = dy;
             pos.pos.z = dz;
             
-            pos.vel.x = vx;
-            pos.vel.y = vy;
-            pos.vel.z = vz;
-            
+            //new part
+            pos.pose.position.x = dx;
+            pos.pose.position.y = dy;
+            pos.pose.position.z = dz;
+            pos.pose.orientation = tf::createQuaternionMsgFromYaw(atan2(vy,vx));
+          
+            pos.velocity.linear.x = vx;
+            pos.velocity.linear.y = vy;
+            pos.velocity.linear.z = vz;
+            // ///////
+              
             pos.reliability = reliability;
             pos.covariance[0] = pow(0.3 / reliability,2.0);
             pos.covariance[1] = 0.0;
