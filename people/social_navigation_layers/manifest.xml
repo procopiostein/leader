@@ -1,0 +1,18 @@
+<package>
+  <description brief="social_navigation_layers">
+
+  </description>
+  <author>David!!</author>
+  <license>BSD</license>
+  <url>http://ros.org/wiki/social_navigation_layers</url>
+  <depend package="pluginlib"/>
+  <depend package="roscpp"/>
+  <depend package="costmap_2d"/>
+  <depend package="people_msgs"/>
+  <depend package="dynamic_reconfigure"/>
+<export>
+  <costmap_2d plugin="${prefix}/costmap_plugins.xml" />
+</export>
+</package>
+
+

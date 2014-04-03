@@ -1,0 +1,18 @@
+<package>
+  <description brief="people_velocity_tracker">
+
+     people_velocity_tracker
+
+  </description>
+  <author>David V. Lu!!</author>
+  <license>BSD</license>
+  <review status="unreviewed" notes=""/>
+  <url>http://ros.org/wiki/people_velocity_tracker</url>
+  <depend package="people_msgs"/>
+  <depend package="geometry_msgs"/>
+  <depend package="rospy"/>
+  <depend package="easy_markers"/>
+
+</package>
+
+

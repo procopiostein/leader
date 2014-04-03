@@ -33,19 +33,8 @@ rosbuild_genmsg()
 rosbuild_add_executable(classify_features src/classify_features.cpp)
 rosbuild_add_executable(bag_tagger src/bag_tagger.cpp)
 rosbuild_add_executable(bag_filter src/bag_filter.cpp)
-# rosbuild_add_executable(leader_follower src/leader_follower.cpp)
-
-rosbuild_add_boost_directories()
 rosbuild_add_executable(leader_follower_class src/leader_follower_class.cpp)
-rosbuild_link_boost(leader_follower_class thread)
 
-
-
-
+# rosbuild_add_executable(leader_follower src/leader_follower.cpp)
 # rosbuild_add_boost_directories()
-# rosbuild_add_executable(fibonacci_server src/fibonacci_server.cpp)
-# rosbuild_link_boost(fibonacci_server thread)
-
-#rosbuild_add_executable(adaboost src/adaboost.cpp)
-#rosbuild_add_executable(predict src/predict.cpp)\
-#rosbuild_add_executable(matlab_rviz src/matlab_rviz.cpp)
+# rosbuild_link_boost(leader_follower_class thread)

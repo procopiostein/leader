@@ -1,0 +1,10 @@
+<launch>
+  
+  <param name="/use_sim_time" value="true" /> 
+<!--   <include file="$(find human_leader)/launch/process_bag.launch"/> -->
+  <node pkg="leg_detector" type="leg_detector" name="leg_detector" args="scan:=base_scan target:=map $(find leg_detector)/config/trained_leg_detector.yaml" output="screen">
+    <param name="leg_reliability_limit" value="0.3" />
+  </node>
+  
+</launch>
+
