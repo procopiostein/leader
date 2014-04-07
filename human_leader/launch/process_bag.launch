@@ -1,7 +1,5 @@
 <launch>
-  
-<!--   <param name="/use_sim_time" value="true" />  -->
-  
+   
   <!-- uses hector slam to provide robot odometry, based on laser measurements -->
   <include file="$(find human_leader)/launch/hector_slam.launch"/>
   

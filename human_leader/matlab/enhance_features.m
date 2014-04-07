@@ -32,14 +32,14 @@ new_features(2:end,16) = diff(input_features(:,8));
 new_features(2:end,17) = diff(input_features(:,9));
 new_features(2:end,18) = diff(input_features(:,10));
 
-new_features(1,11) = new_features(2,10);
-new_features(1,12) = new_features(2,11);
-new_features(1,13) = new_features(2,12);
-new_features(1,14) = new_features(2,13);
-new_features(1,15) = new_features(2,14);
-new_features(1,16) = new_features(2,15);
-new_features(1,17) = new_features(2,16);
-new_features(1,18) = new_features(2,17);
+new_features(1,11) = new_features(2,11);
+new_features(1,12) = new_features(2,12);
+new_features(1,13) = new_features(2,13);
+new_features(1,14) = new_features(2,14);
+new_features(1,15) = new_features(2,15);
+new_features(1,16) = new_features(2,16);
+new_features(1,17) = new_features(2,17);
+new_features(1,18) = new_features(2,18);
 
 
 % mean and stdv part

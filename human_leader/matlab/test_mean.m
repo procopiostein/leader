@@ -5,7 +5,7 @@ for i = 1:length(a)
     end
     
     % stdv part
-%     calc_mean(i) = std(input_features(i-winsize:i,3));
+    calc_std(i) = std(a(i-winsize:i));
     
     % mean part
     calc_mean(i) = mean(a(i-winsize:i));

@@ -10,6 +10,7 @@ sensor_msgs::PointCloud2 pointData;
 
 void PointsHandler(const sensor_msgs::PointCloud2& msg)
 {
+  ROS_INFO("GOT POINTS");
   pointData=msg;
   new_data=true;
 }

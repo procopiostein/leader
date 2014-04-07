@@ -16,7 +16,8 @@
   
   <group ns="/pcp/fus/planar_pc">
 
-    <remap from="/laserscan0" to="/base_scan"/>
+    <!--<remap from="/laserscan0" to="/base_scan"/>-->
+    <remap from="/laserscan0" to="/scan"/>
     <remap from="/base_laser_link" to="/base_laser"/>
     <remap from="/tracking_frame" to="/map"/> 
     <remap from="/pc_out" to="/pointcloud"/>

@@ -31,6 +31,9 @@
  *  in a file (txt) for further processing with matlab
  *  the features will be used for training a classifier
  * 
+ *  it is also responsible of publishing these features to a matlab
+ *  classifier that will then output a message with the classification
+ *  of the target based on its features
  */
 
 #include "ros/ros.h"
@@ -49,32 +52,44 @@
 
 using namespace boost::accumulators;
 
+// static ros::Time start_time;
 ros::Time time_last_msg(0);
 ros::Duration time_elapsed;
+// ros::Duration duration_btw_msg;
+// ros::Publisher nfeatures_pub;
+// ros::Publisher marker_pub;
 
 tf::TransformListener *p_listener;
 tf::StampedTransform transform;
 
 geometry_msgs::Twist twist;
 geometry_msgs::Twist features;
+// geometry_msgs::PoseWithCovariance nfeatures;
+
+// std::list<geometry_msgs::PoseWithCovariance> matlab_list;
 
 //statics
 boost::circular_buffer<double> robot_posex_buffer(30);
-
-double robot_x, robot_y;
-double robot_vel, robot_theta;
+// accumulator_set<double, stats<tag::mean> > acc;
+// accumulator_set<double, features< tag::sum >, int > acc;
 
 double target_x, target_y;
-double target_theta, target_vel;
-double distance_to_robot, lateral_disp, sagittal_disp;
-double relative_heading, angle_to_robot;
-double relative_vel_x, relative_vel_y;
-
+double target_vel, target_theta;
+double robot_x, robot_y;
+double robot_vel, robot_theta;
+double position_diff, heading_diff;
+double angle_to_robot;
+double velocity_diff;
 uint leader_tag = 0;
 uint target_id = 0;
+uint single_target = 0;
+// uint counter = 0;
 
 void targetsCallback(const mtt::TargetList& list)
-{  
+{
+  //will print information that should be stored in a file
+  //file format: id, good/bad tag, time, pos x, pos y, vel, theta
+  //             position_diff, heading_diff, angle_to_robot, velocity_diff
   static ros::Time start_time = ros::Time::now();
   time_elapsed = ros::Time::now() - start_time;
   
@@ -98,7 +113,7 @@ void targetsCallback(const mtt::TargetList& list)
    
   //robot output line 
   /// uncomment the following for training!
-  printf("%d,%d,%.10f,%.10f,%.10f,%.10f,%.10f,0,0,0,0,0,0,0,0\n",
+  printf("%d,%d,%.10f,%.10f,%.10f,%.10f,%.10f,0,0,0,0\n",
          -1, leader_tag, time_elapsed.toSec(),
          robot_x, robot_y, robot_vel, robot_theta); 
 
@@ -115,33 +130,14 @@ void targetsCallback(const mtt::TargetList& list)
     target_x = list.Targets[i].pose.position.x;
     target_y = list.Targets[i].pose.position.y;
     target_theta = tf::getYaw(list.Targets[i].pose.orientation);
-    
-    //velocity of target
     target_vel = sqrt(pow(list.Targets[i].velocity.linear.x,2)+
                       pow(list.Targets[i].velocity.linear.y,2));
-    
-    //angle from target to robot's ref frame
+    position_diff = sqrt(pow(robot_x - target_x,2)+
+                        pow(robot_y - target_y,2));
+    heading_diff = robot_theta - target_theta;
     angle_to_robot = -robot_theta + atan2(target_y - robot_y, 
                                         target_x - robot_x );
-    
-    //robot and target difference in heading
-    relative_heading = robot_theta - target_theta;
-    
-    //velocity diff from target to robot ref. frame in X axis
-    relative_vel_x = (robot_vel - target_vel)*cos(relative_heading);
-    
-    //velocity diff from target to robot ref. frame in Y axis
-    relative_vel_y = (robot_vel - target_vel)*sin(relative_heading);
-    
-    //distance between robot and target
-    distance_to_robot = sqrt(pow(robot_x - target_x,2)+
-                        pow(robot_y - target_y,2));
-    
-    //distance form robot along X axis (robot ref frame)
-    lateral_disp = distance_to_robot * sin(angle_to_robot);
-    
-    //distance form robot along X axis (robot ref frame)
-    sagittal_disp = distance_to_robot * cos(angle_to_robot);
+    velocity_diff = robot_vel - target_vel;
           
     //target output (to be used in adaboost training)
     
@@ -151,31 +147,51 @@ void targetsCallback(const mtt::TargetList& list)
     // % 3: time
     // % 4: pos x
     // % 5: pos y
-    // % 6: heading
-    
-    // % 7: velocity
-    // % 8: lateral disp
-    // % 9: relative heading
-    // %10: angle to robot
-    // %12: distance to robot
-    // %13: relative vel x
-    // %14: relative vel y
-    // %15: sagittal_disp
+    // % 6: vel
+    // % 7: theta
+    // % 8: pos diff
+    // % 9: head diff
+    // %10: angle 2 robot 
+    // %11: velocity diff 
     
     /// uncomment the following to generate training file!
-    printf("%d,%d,%.10f,%.10f,%.10f,%.10f,%.10f,%.10f,%.10f,%.10f,%.10f,%.10f,%.10f,%.10f,%.10f\n",
+    printf("%d,%d,%.10f,%.10f,%.10f,%.10f,%.10f,%.10f,%.10f,%.10f,%.10f\n",
       target_id, leader_tag, time_elapsed.toSec(),
-      target_x, target_y, target_theta,
-      target_vel,
-      lateral_disp,
-      relative_heading,
-      angle_to_robot,
-      distance_to_robot,
-      relative_vel_x,
-      relative_vel_y,
-      sagittal_disp);
+      target_x, target_y, target_vel, target_theta,
+      position_diff, heading_diff, angle_to_robot, velocity_diff);
     
+//     if(position_diff < 6.0 && target_vel > 0.5){
+//       //if inside boundaries (in meters)
+//       //store features in a covariance struct to send to matlab
+//       nfeatures.pose.position.x = target_x;
+//       nfeatures.pose.position.y = target_y;
+//       nfeatures.pose.position.z = target_id;
+// 
+//       nfeatures.covariance[0] = target_vel;
+//       nfeatures.covariance[1] = velocity_diff;
+//       nfeatures.covariance[2] = heading_diff;
+//       nfeatures.covariance[3] = angle_to_robot;
+//       nfeatures.covariance[4] = position_diff;
+//       
+//       matlab_list.push_back(nfeatures);
+// //       counter++;
+//     }
   }
+//   printf("targets within range: %d\n",counter);
+//   counter = 0;
+  
+  //check if enough time has passed 
+  //and send batch of msgs to matlab
+//   duration_btw_msg = ros::Time::now() - time_last_msg;
+//   
+//   if(duration_btw_msg.toSec() > 0.01){
+//     while(!matlab_list.empty()){
+//       nfeatures_pub.publish(matlab_list.front());
+//       matlab_list.pop_front();
+//       usleep(0.01e6); //has to sleep, otherwise matlab do not get the msg
+//     }      
+//     time_last_msg = ros::Time::now();
+//   }
 }
 
 void tagCallback(const std_msgs::Header& tag)
@@ -185,6 +201,52 @@ void tagCallback(const std_msgs::Header& tag)
   leader_tag = 1;
 }
 
+// void drawCallback(const geometry_msgs::Pose& input)
+// {
+//   visualization_msgs::Marker marker;
+//   
+//   marker.header.frame_id = "/map";
+//   marker.header.stamp = ros::Time::now();
+// 
+//   marker.ns = "quality";
+//   marker.id = 0;
+// 
+//   marker.type = visualization_msgs::Marker::CYLINDER;
+//   marker.action = visualization_msgs::Marker::ADD;
+// 
+//   // Set the pose of the marker.  This is a full 6DOF pose relative to the frame/time specified in the header
+//   marker.pose.position.x = input.position.x;
+//   marker.pose.position.y = input.position.y;
+//   marker.pose.position.z = 0;
+//   marker.pose.orientation.x = 0.0;
+//   marker.pose.orientation.y = 0.0;
+//   marker.pose.orientation.z = 0.0;
+//   marker.pose.orientation.w = 1.0;
+// 
+//   // Set the scale of the marker
+//   marker.scale.x = 0.5;
+//   marker.scale.y = 0.5;
+//   marker.scale.z = 0.5;
+//  
+//   //good or bad leader
+//   if(input.position.z == -1){
+//     marker.color.r = 0.0f;
+//     marker.color.g = 1.0f;
+//   }
+//   else if (input.position.z == 1){
+//     marker.color.r = 1.0f;
+//     marker.color.g = 0.0f;
+//   }
+//       
+//   marker.color.b = 0.0f;
+//   marker.color.a = 1.0;
+// 
+//   marker.lifetime = ros::Duration();
+// 
+//   // Publish the marker
+//   marker_pub.publish(marker);
+// }
+
 int main(int argc, char **argv)
 {
   ros::init(argc, argv, "process_target");
@@ -192,9 +254,16 @@ int main(int argc, char **argv)
   
   tf::TransformListener listener;
   p_listener=&listener;
- 
+
+  //for testing purposes
+//   single_target = atoi(argv[1]);
+//   ROS_INFO("chosen target:%d",single_target);
+    
   ros::Subscriber sub = n.subscribe("/targets", 1000, targetsCallback);
   ros::Subscriber sub_tag = n.subscribe("/timetag", 1000, tagCallback);
+//   ros::Subscriber sub_draw = n.subscribe("/pose_to_draw", 1000, drawCallback);
+//   nfeatures_pub = n.advertise<geometry_msgs::PoseWithCovariance>("/example_topic", 100);
+//   marker_pub = n.advertise<visualization_msgs::Marker>("/leader_quality", 1);
 
   ros::spin();
 
